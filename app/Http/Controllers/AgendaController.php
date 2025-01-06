@@ -61,8 +61,6 @@ class AgendaController extends Controller
             'list_daftar_nama' => 'required|array', // Validasi untuk daftar nama
             'list_daftar_nama.*' => 'exists:users,id',
         ]);
-        $priorityNumber = Agenda::generatePriorityNumber($request->kategori);
-
         // Buat agenda baru
         Agenda::create([
             'nama_acara' => $request->nama_acara,
@@ -73,7 +71,6 @@ class AgendaController extends Controller
             'waktu_selesai' => $request->waktu_selesai,
             'tempat' => $request->tempat,
             'list_daftar_nama' => json_encode($request->list_daftar_nama),  // Catat siapa yang membuat
-            'priority_number' => $priorityNumber,
         ]);
 
         return redirect()->route('agendas.index')->with('success', 'Agenda berhasil ditambahkan.');
@@ -124,7 +121,6 @@ class AgendaController extends Controller
             'list_daftar_nama' => 'required|array',
             'list_daftar_nama.*' => 'exists:users,id',
         ]);
-        $priorityNumber = Agenda::generatePriorityNumber($request->kategori);
         // Update agenda
         $agenda->update([
             'nama_acara' => $request->nama_acara,
@@ -135,8 +131,6 @@ class AgendaController extends Controller
             'waktu_selesai' => $request->waktu_selesai,
             'tempat' => $request->tempat,
             'list_daftar_nama' => json_encode($request->list_daftar_nama), // Simpan dalam bentuk JSON
-            'priority_number' => $priorityNumber,
-
         ]);
 
         return redirect()->route('agendas.index')->with('success', 'Agenda berhasil diperbarui.');
