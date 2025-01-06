@@ -1,0 +1,1 @@
+<link rel="icon" href="/images/jabar-pro.png" type="image/png">
