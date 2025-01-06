@@ -5,7 +5,7 @@
 @section('content')
 @include('components.popup')
 <div class="max-w-7xl mx-auto bg-white shadow-lg rounded-lg p-8">
-    <h1 class="text-4xl font-bold text-gray-800 mb-8">Manajemen Data User</h1>
+    <h1 class="text-4xl font-bold text-gray-800 mb-8">Manajemen Data Pegawai</h1>
 
     @if(session('status'))
     @php
