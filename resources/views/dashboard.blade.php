@@ -42,19 +42,20 @@
 <div class="container mx-auto p-4">
     <!-- Form Filter dan Button Salin WA -->
     <div class="mb-8">
-        <form method="GET" action="{{ route('dashboard') }}" class="grid grid-cols-3 gap-4">
+        <form method="GET" action="{{ route('dashboard') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Filter Nama Acara -->
             <div>
                 <label for="search" class="block text-sm font-medium text-gray-700">Nama Acara</label>
                 <input type="text" name="search" id="search" value="{{ request('search') }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Cari nama acara...">
             </div>
 
-            <!-- Filter Tanggal Mulai dan Selesai -->
+            <!-- Filter Tanggal Mulai -->
             <div>
                 <label for="start_date" class="block text-sm font-medium text-gray-700">Tanggal Mulai</label>
                 <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
             </div>
 
+            <!-- Filter Tanggal Selesai -->
             <div>
                 <label for="end_date" class="block text-sm font-medium text-gray-700">Tanggal Selesai</label>
                 <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
@@ -71,7 +72,7 @@
                 </select>
             </div>
 
-            <div class="col-span-3 text-right space-x-2">
+            <div class="col-span-1 sm:col-span-2 lg:col-span-4 text-right space-x-2">
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Terapkan Filter</button>
                 <button type="button" id="reset-btn" class="bg-gray-500 text-white px-4 py-2 rounded-lg">Reset Filter</button>
             </div>
@@ -79,181 +80,174 @@
 
         <!-- Button Salin WA -->
         <div class="text-right mt-4">
-            <button id="copy-wa-btn" class="bg-green-500 text-white px-4 py-2 rounded-lg">
-                <box-icon name='whatsapp' type='logo' color='white'></box-icon> Salin Semua ke WA
+            <button id="copy-wa-btn" class="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2">
+                <box-icon name='whatsapp' type='logo' color='white'></box-icon>
+                <span>Salin Semua ke Format WA</span>
             </button>
-        </div>
-
-        <table class="table-auto w-full border-collapse bg-white rounded-lg shadow-lg">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="px-4 py-2 border">No</th>
-                    <th class="px-4 py-2 border">Nama Acara</th>
-                    <th class="px-4 py-2 border">Kategori</th>
-                    <th class="px-4 py-2 border">Tanggal</th>
-                    <th class="px-4 py-2 border">Waktu</th>
-                    <th class="px-4 py-2 border">Lokasi</th>
-                    <th class="px-4 py-2 border">Undangan</th>
-                </tr>
-            </thead>
-            <tbody id="agenda-table-body">
-                @foreach ($agendas as $agenda)
-                <tr class="hover:bg-gray-50"
-                    data-tanggal="{{ $agenda->tanggal_mulai }}"
-                    data-waktu-mulai="{{ $agenda->waktu_mulai }}">
-                    <td class="px-4 py-2 border text-center">{{ $loop->iteration }}</td>
-                    <td class="px-4 py-2 border">{{ $agenda->nama_acara }}</td>
-                    <td class="px-4 py-2 border">{{ $agenda->kategori }}</td>
-                    <td class="px-4 py-2 border">{{ $agenda->tanggal_mulai }} sampai {{ $agenda->tanggal_selesai }}</td>
-                    <td class="px-4 py-2 border">{{ $agenda->waktu_mulai }} - {{ $agenda->waktu_selesai }}</td>
-                    <td class="px-4 py-2 border">{{ $agenda->tempat }}</td>
-                    <td class="px-4 py-2 border">
-                        @php
-                        $listNama = json_decode($agenda->list_daftar_nama, true);
-                        @endphp
-
-                        @if (!empty($listNama))
-                        <ul>
-                            @foreach ($listNama as $user_id)
-                            <li>{{ App\Models\User::find($user_id)->name ?? 'Tidak ditemukan' }}</li>
-                            @endforeach
-                        </ul>
-                        @else
-                        Tidak ada peserta
-                        @endif
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-
-        <div class="mt-4">
-            {{ $agendas->links() }}
         </div>
     </div>
 
-    <script>
-        function addNewRow(data) {
-            const tableBody = document.getElementById('agenda-table-body');
+    <table class="table-auto w-full border-collapse bg-white rounded-lg shadow-lg">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="px-4 py-2 border">No</th>
+                <th class="px-4 py-2 border">Nama Acara</th>
+                <th class="px-4 py-2 border">Kategori</th>
+                <th class="px-4 py-2 border">Tanggal</th>
+                <th class="px-4 py-2 border">Waktu</th>
+                <th class="px-4 py-2 border">Lokasi</th>
+                <th class="px-4 py-2 border">Undangan</th>
+            </tr>
+        </thead>
+        <tbody id="agenda-table-body">
+            @foreach ($agendas as $agenda)
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-2 border text-center">{{ $loop->iteration }}</td>
+                <td class="px-4 py-2 border">{{ $agenda->nama_acara }}</td>
+                <td class="px-4 py-2 border">{{ $agenda->kategori }}</td>
+                <td class="px-4 py-2 border">{{ $agenda->tanggal_mulai }} sampai {{ $agenda->tanggal_selesai }}</td>
+                <td class="px-4 py-2 border">{{ $agenda->waktu_mulai }} - {{ $agenda->waktu_selesai }}</td>
+                <td class="px-4 py-2 border">{{ $agenda->tempat }}</td>
+                <td class="px-4 py-2 border">
+                    @php
+                    $listNama = json_decode($agenda->list_daftar_nama, true);
+                    @endphp
 
-            // Format tanggal, waktu, dan nama peserta jika diperlukan
-            const pesertaList = data.list_daftar_nama.map(user => `<li>${user.name}</li>`).join('');
+                    @if (!empty($listNama))
+                    <ul>
+                        @foreach (json_decode($agenda->list_daftar_nama, true) as $pegawai_id)
+                        @php
+                        $pegawai = App\Models\Pegawai::find($pegawai_id);
+                        @endphp
+                        <li>{{ $pegawai ? $pegawai->name . ' - ' . $pegawai->bidang->name : 'Tidak ditemukan' }}</li>
+                        @endforeach
+                    </ul>
+                    @else
+                    Tidak ada peserta
+                    @endif
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-            // Buat elemen baris baru
-            const newRow = `
-        <tr class="hover:bg-gray-50" data-tanggal="${data.tanggal_mulai}">
-            <td class="px-4 py-2 border text-center">#</td>
-            <td class="px-4 py-2 border">${data.nama_acara}</td>
-            <td class="px-4 py-2 border">${data.kategori}</td>
-            <td class="px-4 py-2 border">${data.tanggal_mulai} sampai ${data.tanggal_selesai}</td>
-            <td class="px-4 py-2 border">${data.waktu_mulai} - ${data.waktu_selesai}</td>
-            <td class="px-4 py-2 border">${data.tempat}</td>
-            <td class="px-4 py-2 border">
-                <ul>${pesertaList}</ul>
-            </td>
-        </tr>
-    `;
 
-            // Sisipkan baris baru di posisi pertama
-            tableBody.insertAdjacentHTML('afterbegin', newRow);
+    <div class="mt-4">
+        {{ $agendas->links() }}
+    </div>
+</div>
 
-            // Perbarui nomor urut
-            updateRowNumbers();
-        }
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+        const resetButton = document.getElementById('reset-btn');
+        const copyWaBtn = document.getElementById('copy-wa-btn');
+        const form = document.querySelector('form');
 
-        function updateRowNumbers() {
-            const rows = document.querySelectorAll('#agenda-table-body tr');
-            rows.forEach((row, index) => {
-                row.querySelector('td').textContent = index + 1;
-            });
-        }
-        // fungsi filter dan reset
-        document.addEventListener('DOMContentLoaded', function() {
-            const resetBtn = document.getElementById('reset-btn');
-            const form = document.querySelector('form');
-
-            // Reset Filter
-            resetBtn.addEventListener('click', function() {
-                form.reset(); // Reset form inputs
-                form.submit(); // Resubmit to clear filters
-                window.location.href = '{{ route("dashboard") }}';
-            });
-
-        });
-        document.getElementById('copy-wa-btn').addEventListener('click', function() {
-            // Mendapatkan tanggal dan waktu saat ini
-            const now = new Date();
-            const today = now.toISOString().split('T')[0]; // Format YYYY-MM-DD
-            const currentTime = now.toTimeString().split(' ')[0]; // Format HH:MM:SS
-            let textToCopy = '';
-
-            // Mendapatkan semua baris dalam tabel
-            const rows = Array.from(document.querySelectorAll('#agenda-table-body tr'));
-
-            // Menyortir baris berdasarkan tanggal dan waktu
-            rows.sort((a, b) => {
-                const tanggalA = a.getAttribute('data-tanggal');
-                const tanggalB = b.getAttribute('data-tanggal');
-                const waktuA = a.getAttribute('data-waktu-mulai');
-                const waktuB = b.getAttribute('data-waktu-mulai');
-
-                if (tanggalA === tanggalB) {
-                    return waktuA.localeCompare(waktuB); // Urutkan berdasarkan waktu jika tanggal sama
-                }
-                return tanggalA.localeCompare(tanggalB); // Urutkan berdasarkan tanggal
-            });
-
-            // Iterasi melalui setiap baris setelah diurutkan
-            rows.forEach((row, index) => {
-                const tanggalMulai = row.getAttribute('data-tanggal');
-                const waktuMulai = row.getAttribute('data-waktu-mulai');
-
-                // Logika untuk membatasi data hingga pukul 23:59 hari ini
-                
-                    // Mengambil data dari kolom yang diinginkan
-                    const no = index + 1; // Nomor urut setelah sorting
-                    const namaAcara = row.cells[1].innerText;
-                    const kategori = row.cells[2].innerText;
-                    const tanggal = row.cells[3].innerText;
-                    const waktu = row.cells[4].innerText;
-                    const lokasi = row.cells[5].innerText;
-                    const undangan = row.cells[6].innerText;
-
-                    // Menyusun teks yang akan disalin
-                    textToCopy += `No: ${no}\nNama Acara: ${namaAcara}\nKategori: ${kategori}\nTanggal: ${tanggal}\nWaktu: ${waktu}\nLokasi: ${lokasi}\nUndangan: ${undangan}\n\n`;
-            });
-
-            // Menyalin teks ke clipboard
-            if (textToCopy) {
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    alert('Data berhasil disalin ke clipboard!');
-                }).catch(err => {
-                    console.error('Gagal menyalin: ', err);
-                });
+        // Ensure end_date is required when start_date is selected
+        startDateInput.addEventListener('change', () => {
+            if (startDateInput.value) {
+                endDateInput.setAttribute('required', 'required');
             } else {
-                alert('Tidak ada agenda untuk hari ini sebelum pukul 23:59.');
+                endDateInput.removeAttribute('required');
             }
         });
 
-        // Fungsi untuk menyembunyikan data di hari-hari lain
-        function filterAgendaByToday() {
-            const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
-            const rows = Array.from(document.querySelectorAll('#agenda-table-body tr'));
+        // Handle the reset filter functionality
+        resetButton.addEventListener('click', () => {
+            form.reset(); // Mengatur ulang semua input ke nilai default
+            filterInputs.forEach(input => input.value = ''); // Pastikan semua input kosong
+            endDateInput.removeAttribute('required'); // Pastikan end_date tidak wajib
+            window.location.href = "{{ route('dashboard') }}"; // Redirect to clear query parameters
+        });
+
+        // Filter data dynamically based on inputs
+        const filterInputs = document.querySelectorAll('#search, #start_date, #end_date, #kategori');
+        filterInputs.forEach(input => {
+            input.addEventListener('change', () => filterData());
+        });
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            filterData();
+        });
+        // function filterData
+        function filterData(reset = false) {
+            const searchValue = reset ? '' : document.getElementById('search').value.toLowerCase().trim(); // Case-insensitive
+            const startDateValue = reset ? '' : startDateInput.value;
+            const endDateValue = reset ? '' : endDateInput.value;
+            const kategoriValue = reset ? '' : document.getElementById('kategori').value;
+
+            const tableBody = document.getElementById('agenda-table-body');
+            const rows = tableBody.querySelectorAll('tr');
 
             rows.forEach(row => {
-                const tanggalMulai = row.getAttribute('data-tanggal');
-                // Hanya tampilkan baris dengan tanggal sama dengan hari ini
-                if (tanggalMulai !== today) {
-                    row.style.display = 'none'; // Sembunyikan baris
+                const namaAcara = row.querySelector('td:nth-child(2)').textContent.toLowerCase().trim(); // Pastikan lower-case dan trim
+                const kategori = row.querySelector('td:nth-child(3)').textContent.trim();
+                const tanggal = row.querySelector('td:nth-child(4)').textContent.trim();
+
+                const [start, end] = tanggal.split(' sampai ').map(date => new Date(date.trim()));
+
+                const matchesSearch = !searchValue || namaAcara.includes(searchValue);
+                const matchesStartDate = !startDateValue || start >= new Date(startDateValue);
+                const matchesEndDate = !endDateValue || end <= new Date(endDateValue);
+                const matchesKategori = !kategoriValue || kategori === kategoriValue;
+
+                if (matchesSearch && matchesStartDate && matchesEndDate && matchesKategori) {
+                    row.style.display = ''; // Tampilkan baris jika cocok
                 } else {
-                    row.style.display = ''; // Tampilkan baris
+                    row.style.display = 'none'; // Sembunyikan baris jika tidak cocok
                 }
             });
         }
 
-        // Jalankan filter saat halaman dimuat
-        window.onload = filterAgendaByToday;
-    </script>
+        // Handle the reset filter functionality
+        resetButton.addEventListener('click', () => {
+            form.reset(); // Mengatur ulang semua input ke nilai default
+            filterData(true); // Tampilkan semua data
+            endDateInput.removeAttribute('required'); // Pastikan end_date tidak wajib
+        });
 
-    @endsection
+        // Copy filtered data to WhatsApp
+        copyWaBtn.addEventListener('click', () => {
+            const tableBody = document.getElementById('agenda-table-body');
+            const rows = Array.from(tableBody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
+
+            if (rows.length === 0) {
+                alert('Tidak ada data yang sesuai dengan filter.');
+                return;
+            }
+
+            let textToCopy = '';
+            rows.forEach((row, index) => {
+                const no = index + 1;
+                const namaAcara = row.querySelector('td:nth-child(2)').textContent;
+                const kategori = row.querySelector('td:nth-child(3)').textContent;
+                const tanggal = row.querySelector('td:nth-child(4)').textContent;
+                const waktu = row.querySelector('td:nth-child(5)').textContent;
+                const lokasi = row.querySelector('td:nth-child(6)').textContent;
+
+                // Handle "Undangan" content and ensure proper formatting
+                const undanganCell = row.querySelector('td:nth-child(7)');
+                const undangan = Array.from(undanganCell.querySelectorAll('li'))
+                    .map(li => li.textContent.trim())
+                    .filter(text => text !== '') // Remove empty texts
+                    .join(', '); // Combine with comma and space
+
+                textToCopy += `No: ${no}\nNama Acara: ${namaAcara}\nKategori: ${kategori}\nTanggal: ${tanggal}\nWaktu: ${waktu}\nLokasi: ${lokasi}\nUndangan: ${undangan}\n\n`;
+            });
+
+            // Copy text to clipboard
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    alert('Data berhasil disalin ke clipboard!');
+                })
+                .catch(err => {
+                    console.error('Gagal menyalin: ', err);
+                });
+        });
+    });
+</script>
+
+@endsection

@@ -16,6 +16,7 @@ Route::get('/', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 Route::get('/dashboard/export/{format}', [DashboardController::class, 'export'])->name('dashboard.export');
+Route::get('/dashboard/copyAll', [DashboardController::class, 'copyAll'])->name('dashboard.copyAll');
 
 
 Route::middleware('auth')->group(function () { // Untuk proses verifikasi

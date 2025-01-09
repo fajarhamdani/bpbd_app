@@ -69,7 +69,7 @@
             class="flex items-center px-4 py-2 rounded-lg 
         {{ request()->is('pegawai.create') ? 'bg-blue-300 text-black-600' : 'text-gray-700 hover:text-gray-600' }} 
         transition duration-300 ease-in-out transform hover:scale-105 hover:bg-blue-200">
-            <span class="font-medium text-m">Daftar Data NIP Baru</span>
+            <span class="font-medium text-m">Data Pegawai</span>
         </a>
         @endif
         <a href="{{ route('agendas.index') }}"
