@@ -40,4 +40,9 @@ class Agenda extends Model
     {
         return $this->hasMany(AgendaPegawai::class);
     }
+
+    public function pegawai()
+    {
+        return $this->belongsToMany(Pegawai::class, 'agenda_pegawai', 'agenda_id', 'pegawai_id');
+    }
 }

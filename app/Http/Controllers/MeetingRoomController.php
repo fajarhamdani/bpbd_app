@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agenda;
 use App\Models\User;
 use App\Models\Bidang;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,10 +15,16 @@ class MeetingRoomController extends Controller
     // Menampilkan daftar agenda dengan kategori 'meeting'
     public function index()
     {
-        $agendas = Agenda::with('bidang', 'users')->paginate(25); // Ambil semua agenda dengan relasi ke bidang
+        $today = now(); // Mendefinisikan variabel $today dengan tanggal dan waktu saat ini
+        $agendas = Agenda::with('bidang', 'users', 'pegawai') // Memuat relasi 'bidang', 'users', dan 'pegawai'
+        ->whereDate('tanggal_mulai', '>=', $today->subDay()) // Menyaring agenda yang tanggal mulainya adalah kemarin, hari ini, besok, dan seterusnya
+            ->orderBy('tanggal_mulai', 'asc') // Mengurutkan berdasarkan tanggal mulai secara ascending
+            ->orderBy('waktu_mulai', 'asc') // Mengurutkan berdasarkan waktu mulai secara ascending
+            ->paginate(25); // Ambil semua agenda dengan relasi ke bidang // Ambil semua agenda dengan relasi ke bidang
         $users = User::where('role_id', 1)->orWhere('role_id', 2)->get();
+        $pegawai = Pegawai::all();
         $bidangs = Bidang::all(); // Ambil semua bidang untuk form create
-        return view('meeting-rooms.index', compact('agendas', 'bidangs', 'users'));
+        return view('meeting-rooms.index', compact('agendas', 'bidangs', 'users', 'pegawai'));
     }
 
     public function toggleLaporan($id)
@@ -57,7 +64,7 @@ class MeetingRoomController extends Controller
             'waktu_selesai' => 'required',
             'tempat' => 'required|string|max:255',
             'list_daftar_nama' => 'required|array',
-            'list_daftar_nama.*' => 'exists:users,id',
+            'list_daftar_nama.*' => 'exists:pegawai,id',
         ]);
 
         // Buat agenda baru
@@ -93,10 +100,11 @@ class MeetingRoomController extends Controller
     public function edit($id)
     {
         $agenda = Agenda::findOrFail($id); // Cari agenda berdasarkan ID
+        $pegawai = Pegawai::all(); // Ambil semua pegawai untuk form edit
         $users = User::where('role_id', 1)->orWhere('role_id', 2)->get();
         $bidangs = Bidang::all(); // Ambil semua bidang untuk form edit
 
-        return view('meeting-rooms.edit', compact('agenda', 'bidangs', 'users'));
+        return view('meeting-rooms.edit', compact('agenda', 'bidangs', 'users', 'pegawai'));
     }
 
     public function update(Request $request, $id)
@@ -118,7 +126,7 @@ class MeetingRoomController extends Controller
             'waktu_selesai' => 'required',
             'tempat' => 'required|string|max:255',
             'list_daftar_nama' => 'required|array',
-            'list_daftar_nama.*' => 'exists:users,id',
+            'list_daftar_nama.*' => 'exists:pegawai,id',
         ]);
 
         // Update agenda

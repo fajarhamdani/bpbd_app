@@ -25,30 +25,45 @@ class DashboardController extends Controller
         $endDate = $request->input('end_date'); // Tanggal selesai
         $kategori = $request->input('kategori'); // Kategori
 
-        // Mulai query agenda
-        $query = Agenda::query();
+        // Jika tidak ada filter, kembalikan semua data
+        if (!$search && !$startDate && !$endDate && !$kategori) {
+            $agendas = Agenda::all();
+        } else {
+            // Mulai query agenda
+            $query = Agenda::query();
 
-        // Filter berdasarkan nama acara
-        if ($search) {
-            $query->where('nama_acara', 'like', '%' . $search . '%');
+            // Filter berdasarkan nama acara
+            if ($search) {
+                $query->whereRaw('LOWER(nama_acara) LIKE ?', [strtolower($search)]);
+            }
+
+            // Filter berdasarkan kategori
+            if ($kategori) {
+                $query->where('kategori', $kategori);
+            }
+
+            // Filter berdasarkan tanggal mulai dan selesai
+            if ($startDate && $endDate) {
+                $query->whereBetween('tanggal_mulai', [
+                    Carbon::parse($startDate)->startOfDay(),
+                    Carbon::parse($endDate)->endOfDay()
+                ]);
+            } elseif ($startDate) {
+                $query->whereDate('tanggal_mulai', '>=', Carbon::parse($startDate)->startOfDay());
+            } elseif ($endDate) {
+                $query->whereDate('tanggal_mulai', '<=', Carbon::parse($endDate)->endOfDay());
+            }
+
+            $agendas = $query->get();
         }
-
-        // Filter berdasarkan kategori
-        if ($kategori) {
-            $query->where('kategori', $kategori);
-        }
-
-        // Filter berdasarkan tanggal mulai dan selesai
-        // if ($startDate && $endDate) {
-        //     $query->whereBetween('tanggal_mulai', [
-        //         Carbon::parse($startDate)->startOfDay(),
-        //         Carbon::parse($endDate)->endOfDay()
-        //     ]);
-        // }
 
         // Paginate hasil query dengan filter yang diterapkan
-        $agendas = $query->paginate(30);
-
+        $today = now(); // Mendefinisikan variabel $today dengan tanggal dan waktu saat ini
+        $agendas = Agenda::with('bidang', 'users', 'pegawai') // Memuat relasi 'bidang', 'users', dan 'pegawai'
+            ->whereDate('tanggal_mulai', '>=', $today->subDay()) // Menyaring agenda yang tanggal mulainya adalah kemarin, hari ini, besok, dan seterusnya
+            ->orderBy('tanggal_mulai', 'asc') // Mengurutkan berdasarkan tanggal mulai secara ascending
+            ->orderBy('waktu_mulai', 'asc') // Mengurutkan berdasarkan waktu mulai secara ascending
+            ->paginate(25); // Ambil semua agenda dengan relasi ke bidang
         // Ambil data bidang
         $bidangs = Bidang::all();
         $users = User::all();
@@ -56,6 +71,4 @@ class DashboardController extends Controller
         // Mengirimkan data agendaCount, agendas, dan bidangs ke view
         return view('dashboard', compact('agendaCount', 'agendas', 'bidangs', 'users'));
     }
-
-    
 }
