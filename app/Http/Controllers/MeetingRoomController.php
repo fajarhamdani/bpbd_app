@@ -15,12 +15,20 @@ class MeetingRoomController extends Controller
     // Menampilkan daftar agenda dengan kategori 'meeting'
     public function index()
     {
-        $today = now(); // Mendefinisikan variabel $today dengan tanggal dan waktu saat ini
-        $agendas = Agenda::with('bidang', 'users', 'pegawai') // Memuat relasi 'bidang', 'users', dan 'pegawai'
-        ->whereDate('tanggal_mulai', '>=', $today->subDay()) // Menyaring agenda yang tanggal mulainya adalah kemarin, hari ini, besok, dan seterusnya
-            ->orderBy('tanggal_mulai', 'asc') // Mengurutkan berdasarkan tanggal mulai secara ascending
+        $query = Agenda::query();
+        $tomorrow = now()->addDay();
+        $today = now();
+        $yesterday = now()->subDay();
+
+        $agendas = $query->with('bidang', 'users', 'pegawai') // Memuat relasi 'bidang', 'users', dan 'pegawai'
+            ->orderByRaw("CASE 
+        WHEN DATE(tanggal_mulai) = ? THEN 0 
+        WHEN DATE(tanggal_mulai) = ? THEN 1 
+        WHEN DATE(tanggal_mulai) = ? THEN 2 
+        ELSE 3 END", [$tomorrow->toDateString(), $today->toDateString(), $yesterday->toDateString()]) // Menempatkan agenda besok di paling atas, diikuti hari ini, lalu kemarin
+            ->orderBy('tanggal_mulai', 'desc') // Mengurutkan berdasarkan tanggal mulai secara descending
             ->orderBy('waktu_mulai', 'asc') // Mengurutkan berdasarkan waktu mulai secara ascending
-            ->paginate(25); // Ambil semua agenda dengan relasi ke bidang // Ambil semua agenda dengan relasi ke bidang
+            ->paginate(25);
         $users = User::where('role_id', 1)->orWhere('role_id', 2)->get();
         $pegawai = Pegawai::all();
         $bidangs = Bidang::all(); // Ambil semua bidang untuk form create

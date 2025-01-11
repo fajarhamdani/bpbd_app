@@ -104,7 +104,7 @@
         <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
             <table class="table-auto w-full border-collapse">
                 <thead>
-                    <tr class="bg-gray-100 text-left">
+                    <tr class="bg-gray-200 text-left">
                         <th class="px-4 py-2">No</th>
                         <th class="px-4 py-2">Nama Acara</th>
                         <th class="px-4 py-2">Kategori</th>
@@ -118,7 +118,7 @@
                 </thead>
                 <tbody>
                     @foreach ($agendas as $agenda)
-                    <tr data-kategori="{{ $agenda->kategori }}" class="hover:bg-gray-50">
+                    <tr data-kategori="{{ $agenda->kategori }}" class="{{ $loop->odd ? 'bg-gray-100' : 'bg-white' }} hover:bg-gray-200 transition duration-200">
                         <td class="px-4 py-2">{{ $loop->iteration }}</td>
                         <td class="px-4 py-2">{{ $agenda->nama_acara }}</td>
                         <td class="px-4 py-2">{{ $agenda->kategori }}</td>
@@ -129,7 +129,7 @@
                             <ul class="list-disc pl-4">
                                 @foreach (json_decode($agenda->list_daftar_nama, true) as $pegawai_id)
                                 @php
-                                    $pegawai = App\Models\Pegawai::find($pegawai_id);
+                                $pegawai = App\Models\Pegawai::find($pegawai_id);
                                 @endphp
                                 <li>{{ $pegawai ? $pegawai->name . '-' . $pegawai->bidang->name : 'Tidak ditemukan' }}</li>
                                 @endforeach

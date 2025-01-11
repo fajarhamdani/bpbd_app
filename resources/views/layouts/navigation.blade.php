@@ -38,6 +38,7 @@
                 </svg>
                 Logout
             </button>
+            <script src="{{ asset('js/logout.js') }}" defer></script>
         </form>
         @else
         <h2 class="text-lg font-semibold">Guest</h2>

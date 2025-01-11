@@ -25,45 +25,46 @@ class DashboardController extends Controller
         $endDate = $request->input('end_date'); // Tanggal selesai
         $kategori = $request->input('kategori'); // Kategori
 
-        // Jika tidak ada filter, kembalikan semua data
-        if (!$search && !$startDate && !$endDate && !$kategori) {
-            $agendas = Agenda::all();
-        } else {
-            // Mulai query agenda
-            $query = Agenda::query();
+        // Mulai query agenda
+        $query = Agenda::query();
 
-            // Filter berdasarkan nama acara
-            if ($search) {
-                $query->whereRaw('LOWER(nama_acara) LIKE ?', [strtolower($search)]);
-            }
+        // Filter berdasarkan nama acara
+        if ($search) {
+            $query->whereRaw('LOWER(nama_acara) LIKE ?', ['%' . strtolower($search) . '%']);
+        }
 
-            // Filter berdasarkan kategori
-            if ($kategori) {
-                $query->where('kategori', $kategori);
-            }
+        // Filter berdasarkan kategori
+        if ($kategori) {
+            $query->where('kategori', $kategori);
+        }
 
-            // Filter berdasarkan tanggal mulai dan selesai
-            if ($startDate && $endDate) {
-                $query->whereBetween('tanggal_mulai', [
-                    Carbon::parse($startDate)->startOfDay(),
-                    Carbon::parse($endDate)->endOfDay()
-                ]);
-            } elseif ($startDate) {
-                $query->whereDate('tanggal_mulai', '>=', Carbon::parse($startDate)->startOfDay());
-            } elseif ($endDate) {
-                $query->whereDate('tanggal_mulai', '<=', Carbon::parse($endDate)->endOfDay());
-            }
-
-            $agendas = $query->get();
+        // Filter berdasarkan tanggal mulai dan selesai
+        if ($startDate && $endDate) {
+            $query->whereBetween('tanggal_mulai', [
+                Carbon::parse($startDate)->startOfDay(),
+                Carbon::parse($endDate)->endOfDay()
+            ]);
+        } elseif ($startDate) {
+            $query->whereDate('tanggal_mulai', '>=', Carbon::parse($startDate)->startOfDay());
+        } elseif ($endDate) {
+            $query->whereDate('tanggal_mulai', '<=', Carbon::parse($endDate)->endOfDay());
         }
 
         // Paginate hasil query dengan filter yang diterapkan
         $today = now(); // Mendefinisikan variabel $today dengan tanggal dan waktu saat ini
-        $agendas = Agenda::with('bidang', 'users', 'pegawai') // Memuat relasi 'bidang', 'users', dan 'pegawai'
-            ->whereDate('tanggal_mulai', '>=', $today->subDay()) // Menyaring agenda yang tanggal mulainya adalah kemarin, hari ini, besok, dan seterusnya
-            ->orderBy('tanggal_mulai', 'asc') // Mengurutkan berdasarkan tanggal mulai secara ascending
+        $yesterday = $today->copy()->subDay(); // Mendefinisikan variabel $yesterday dengan tanggal kemarin
+        $tomorrow = $today->copy()->addDay(); // Mendefinisikan variabel $tomorrow dengan tanggal besok
+
+        $agendas = $query->with('bidang', 'users', 'pegawai') // Memuat relasi 'bidang', 'users', dan 'pegawai'
+            ->orderByRaw("CASE 
+            WHEN DATE(tanggal_mulai) = ? THEN 0 
+            WHEN DATE(tanggal_mulai) = ? THEN 1 
+            WHEN DATE(tanggal_mulai) = ? THEN 2 
+            ELSE 3 END", [$tomorrow->toDateString(), $today->toDateString(), $yesterday->toDateString()]) // Menempatkan agenda besok di paling atas, diikuti hari ini, lalu kemarin
+            ->orderBy('tanggal_mulai', 'desc') // Mengurutkan berdasarkan tanggal mulai secara descending
             ->orderBy('waktu_mulai', 'asc') // Mengurutkan berdasarkan waktu mulai secara ascending
-            ->paginate(25); // Ambil semua agenda dengan relasi ke bidang
+            ->paginate(25);
+
         // Ambil data bidang
         $bidangs = Bidang::all();
         $users = User::all();

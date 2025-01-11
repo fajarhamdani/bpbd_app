@@ -89,7 +89,7 @@
 
     <table class="table-auto w-full border-collapse bg-white rounded-lg shadow-lg">
         <thead>
-            <tr class="bg-gray-100">
+            <tr class="bg-white">
                 <th class="px-4 py-2 border">No</th>
                 <th class="px-4 py-2 border">Nama Acara</th>
                 <th class="px-4 py-2 border">Kategori</th>
@@ -101,7 +101,7 @@
         </thead>
         <tbody id="agenda-table-body">
             @foreach ($agendas as $agenda)
-            <tr class="hover:bg-gray-50">
+            <tr class="{{ $loop->odd ? 'bg-gray-100' : 'bg-white' }} hover:bg-gray-200 transition duration-200">
                 <td class="px-4 py-2 border text-center">{{ $loop->iteration }}</td>
                 <td class="px-4 py-2 border">{{ $agenda->nama_acara }}</td>
                 <td class="px-4 py-2 border">{{ $agenda->kategori }}</td>
