@@ -81,10 +81,10 @@
                     <label for="list_daftar_nama" class="block text-sm font-medium text-gray-700">Daftar Nama Peserta</label>
                     <input type="text" id="search_list_daftar_nama" class="input-field mb-2" placeholder="Cari nama peserta..." oninput="filterOptions()">
                     <div id="list_daftar_nama" class="space-y-2 max-h-40 overflow-y-auto">
-                        @foreach ($users as $user)
+                        @foreach ($pegawai as $item)
                         <div class="flex items-center">
-                            <input type="checkbox" name="list_daftar_nama[]" value="{{ $user->id }}" id="user_{{ $user->id }}" class="checkbox" {{ in_array($user->id, json_decode($agenda->list_daftar_nama, true)) ? 'checked' : '' }}>
-                            <label for="user_{{ $user->id }}" class="ml-2">{{ $user->name }}</label>
+                            <input type="checkbox" name="list_daftar_nama[]" value="{{ $item->id }}" id="pegawai_{{ $item->id }}" class="checkbox">
+                            <label for="pegawai_{{ $item->id }}" class="ml-2">{{ $item->name }} - {{ $item->bidang->name }}</label>
                         </div>
                         @endforeach
                     </div>
