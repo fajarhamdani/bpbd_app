@@ -172,6 +172,7 @@
             event.preventDefault();
             filterData();
         });
+
         // function filterData
         function filterData(reset = false) {
             const searchValue = reset ? '' : document.getElementById('search').value.toLowerCase().trim(); // Case-insensitive
@@ -212,12 +213,25 @@
         // Copy filtered data to WhatsApp
         copyWaBtn.addEventListener('click', () => {
             const tableBody = document.getElementById('agenda-table-body');
-            const rows = Array.from(tableBody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
+            let rows = Array.from(tableBody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
 
             if (rows.length === 0) {
                 alert('Tidak ada data yang sesuai dengan filter.');
                 return;
             }
+
+            // Sort rows by date and time
+            rows = rows.sort((a, b) => {
+                const dateA = new Date(a.querySelector('td:nth-child(4)').textContent.split(' sampai ')[0].trim());
+                const dateB = new Date(b.querySelector('td:nth-child(4)').textContent.split(' sampai ')[0].trim());
+                const timeA = a.querySelector('td:nth-child(5)').textContent.split(' - ')[0].trim();
+                const timeB = b.querySelector('td:nth-child(5)').textContent.split(' - ')[0].trim();
+
+                if (dateA - dateB !== 0) {
+                    return dateA - dateB;
+                }
+                return timeA.localeCompare(timeB);
+            });
 
             let textToCopy = '';
             rows.forEach((row, index) => {
