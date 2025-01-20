@@ -141,11 +141,17 @@
                             </button>
                         </td>
                         <td class="px-4 py-2 text-center">
-                            <a href="{{ route('agendas.edit', $agenda->id) }}" class="btn-edit">Edit</a>
+                            <a href="{{ route('agendas.edit', $agenda->id) }}" class="text-blue-500 hover:text-blue-700">
+                                <i class='bx bx-edit-alt bx-sm'></i>
+                                Edit
+                            </a>
                             <form action="{{ route('agendas.destroy', $agenda->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-delete">Hapus</button>
+                                <button type="submit" class="text-red-500 hover:text-red-700">
+                                    <i class='bx bx-trash bx-sm'></i>
+                                    Hapus
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -265,6 +271,32 @@
             }
         });
     }
+    // SweetAlert for delete confirmation
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteForms = document.querySelectorAll('form[action*="agendas"][method="POST"]');
+
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const form = this;
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: 'Anda tidak akan dapat mengembalikan ini!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
 </script>
 
 @endsection

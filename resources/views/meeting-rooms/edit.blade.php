@@ -45,10 +45,9 @@
                 </div>
 
                 <div>
-                    <label for="kategori" class="block text-sm font-medium text-gray-700">Kategori</label>
+                    <label for="kategori" class="block text-sm font-medium text-gray-700">Kategori Rapat</label>
                     <select id="kategori" name="kategori" class="input-field">
-                        <option value="Biasa" {{ $agenda->kategori == 'Biasa' ? 'selected' : '' }}>Biasa</option>
-                        <option value="Penting" {{ $agenda->kategori == 'Penting' ? 'selected' : '' }}>Penting</option>
+                        <option value="Rapat" {{ $agenda->kategori == 'Rapat' ? 'selected' : '' }}>Rapat</option>
                     </select>
                 </div>
 

@@ -4,6 +4,7 @@
 
 @section('content')
 @include('components.popup')
+<link href="{{ asset('css/media-beranda.css') }}" rel="stylesheet">
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
     <!-- Kategori Umum -->
     <div class="status-item p-6 bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl">
@@ -114,7 +115,7 @@
                     @endphp
 
                     @if (!empty($listNama))
-                    <ul>
+                    <ul class= "list-disc pl-4">
                         @foreach (json_decode($agenda->list_daftar_nama, true) as $pegawai_id)
                         @php
                         $pegawai = App\Models\Pegawai::find($pegawai_id);

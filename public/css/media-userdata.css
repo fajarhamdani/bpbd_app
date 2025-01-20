@@ -1,0 +1,177 @@
+/* Base Styles */
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.custom-container-class {
+    padding: 1rem;
+}
+
+/* Table Styles */
+.user-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.user-table th,
+.user-table td {
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #374151;
+    color: white;
+    font-weight: bold;
+}
+
+.user-table td {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+}
+
+.user-row:hover {
+    background-color: #f3f4f6;
+}
+
+/* Action Buttons */
+.action-buttons button {
+    display: inline-block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.action-buttons button:hover {
+    transform: translateY(-2px);
+}
+
+/* Media Queries */
+@media (max-width: 480px) {
+    /* Extra Small Devices (Portrait Phones and Mobile) */
+    .custom-container-class {
+        padding: 0.25rem;
+    }
+
+    .user-management-title {
+        font-size: 1.25rem;
+    }
+
+    .user-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .user-table th,
+    .user-table td {
+        font-size: 0.625rem;
+        padding: 0.25rem;
+    }
+
+    .action-buttons button {
+        font-size: 0.625rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .pagination-links {
+        font-size: 0.625rem;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Small Devices (Tablet) */
+    .custom-container-class {
+        padding: 1rem;
+    }
+
+    .user-management-title {
+        font-size: 2rem;
+    }
+
+    .user-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .user-table th,
+    .user-table td {
+        font-size: 0.875rem;
+        padding: 0.75rem;
+    }
+
+    .action-buttons button {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Medium Devices (Small Laptop) */
+    .custom-container-class {
+        padding: 1.5rem;
+    }
+
+    .user-management-title {
+        font-size: 2.5rem;
+    }
+
+    .user-table th,
+    .user-table td {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .action-buttons button {
+        font-size: 0.875rem;
+        padding: 0.75rem 1.25rem;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+    /* Large Devices (Desktop) */
+    .custom-container-class {
+        padding: 2rem;
+    }
+
+    .user-management-title {
+        font-size: 3rem;
+    }
+
+    .user-table th,
+    .user-table td {
+        font-size: 1rem;
+        padding: 1rem 1.5rem;
+    }
+
+    .action-buttons button {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+}
+
+@media (min-width: 1201px) {
+    /* Extra Large Devices (Large Desktops) */
+    .custom-container-class {
+        padding: 2.5rem;
+    }
+
+    .user-management-title {
+        font-size: 3.5rem;
+    }
+
+    .user-table th,
+    .user-table td {
+        font-size: 1.125rem;
+        padding: 1.25rem 1.75rem;
+    }
+
+    .action-buttons button {
+        font-size: 1.125rem;
+        padding: 1rem 1.75rem;
+    }
+}

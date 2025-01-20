@@ -125,6 +125,88 @@
             z-index: 100;
             /* Pastikan tombol berada di atas elemen lainnya */
         }
+
+        /* Header stay di paling atas secara mutlak */
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        #mainContent {
+            padding-top: 90px;
+            /*jarak antar mian content dan header */
+        }
+
+        /* Bottom Navigation Styles */
+        #bottomNav {
+            background-color: #ffffff;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+            text-decoration: none;
+            transition: transform 0.3s, color 0.3s;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #1e40af;
+            /* Tailwind blue-900 */
+            transform: translateY(-5px);
+        }
+
+        .nav-item:hover .nav-icon {
+            transform: scale(1.2);
+            color: #1e40af;
+            /* Tailwind blue-900 */
+        }
+
+        .nav-item:hover .nav-text {
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            color: #a0aec0;
+            /* Tailwind gray-400 */
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            margin-top: 4px;
+            color: #718096;
+            /* Tailwind gray-600 */
+            transition: font-weight 0.3s, color 0.3s;
+        }
+
+        /* Glow Effect on Active or Hovered Items */
+        .nav-item:active .nav-icon,
+        .nav-item:focus .nav-icon {
+            box-shadow: 0px 0px 8px rgba(30, 64, 175, 0.6);
+            /* Blue glow */
+            transform: scale(1.1);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 640px) {
+            .nav-icon {
+                font-size: 20px;
+            }
+
+            .nav-text {
+                font-size: 10px;
+            }
+        }
     </style>
     <!-- script logika sidebar -->
     <script src="{{ asset('js/sidebarToggle.js') }}" defer></script>

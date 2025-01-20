@@ -1,8 +1,8 @@
 <!-- Header -->
 <header id="header" class="bg-gradient-to-r from-yellow-300 to-red-600 p-2 shadow-md transition-all duration-300">
     <div class="container mx-auto flex justify-between items-center">
-        <!-- Hamburger Button -->
-        <button id="sidebarToggle" class="focus:outline-none">
+        <!-- Hamburger Button for Laptop and PC -->
+        <button id="sidebarToggle" class="focus:outline-none hidden lg:block">
             <div class="hamburger">
                 <div class="line1 w-6 h-1 bg-white mb-1"></div>
                 <div class="line2 w-6 h-1 bg-white mb-1"></div>
@@ -20,9 +20,8 @@
     </div>
 </header>
 
-<!-- Sidebar -->
-<div id="sidebar" class="bg-white shadow-lg p-5">
-
+<!-- Sidebar for Laptop and PC -->
+<div id="sidebar" class="bg-white shadow-lg p-5 hidden lg:block">
     <div class="flex flex-col items-center mb-6">
         <a href="{{ route('profile.edit') }}" class="flex flex-col items-center mb-4">
             <img class="w-24 h-24 rounded-full border-2 border-blue-500" src="{{ asset('images/user-subject.png') }}" alt="Profile Picture">
@@ -86,12 +85,36 @@
         transition duration-300 ease-in-out transform hover:scale-105 hover:bg-blue-200">
             <span class="font-medium text-m">Informasi Ruang Rapat</span>
         </a>
-
-
     </nav>
 
     <h2 class="text-gray-400 text-base mb-4 ml-4 absolute bottom-0 left-0 p-4">&copy; Hak Cipta 2024</h2>
 </div>
+<!-- Bottom Navigation Bar for Mobile and Tablet -->
+<div id="bottomNav" class="fixed bottom-0 left-0 w-full bg-white shadow-lg p-4 flex justify-around lg:hidden transition-transform duration-300 z-50">
+    <a href="/" class="nav-item">
+        <box-icon name="home" class="nav-icon"></box-icon>
+        <span class="nav-text">Beranda</span>
+    </a>
+    <a href="{{ route('users.index') }}" class="nav-item">
+        <box-icon name="user" class="nav-icon"></box-icon>
+        <span class="nav-text">Data User</span>
+    </a>
+    @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
+    <a href="{{ route('pegawai.create') }}" class="nav-item">
+        <box-icon name="folder-plus" class="nav-icon"></box-icon>
+        <span class="nav-text">Data Pegawai</span>
+    </a>
+    @endif
+    <a href="{{ route('agendas.index') }}" class="nav-item">
+        <box-icon name="calendar" class="nav-icon"></box-icon>
+        <span class="nav-text">Agenda Kegiatan</span>
+    </a>
+    <a href="{{ route('meeting-rooms.index') }}" class="nav-item">
+        <box-icon name="building" class="nav-icon"></box-icon>
+        <span class="nav-text">Ruang Rapat</span>
+    </a>
+</div>
+
 
 <main id="mainContent" class="transition-all duration-300 p-8">
     @yield('content')

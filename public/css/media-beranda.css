@@ -1,0 +1,423 @@
+/* Mobile Styles */
+@media (max-width: 320px) {
+    .status-item {
+        padding: 5px;
+        font-size: 0.75rem;
+    }
+
+    .status-item h3 {
+        font-size: 0.875rem;
+    }
+
+    .status-item p {
+        font-size: 1.5rem;
+    }
+
+    .table-auto th,
+    .table-auto td {
+        padding: 1px;
+        font-size: 0.625rem;
+    }
+
+    .table-auto th {
+        font-size: 0.75rem;
+    }
+
+    .table-auto td {
+        font-size: 0.625rem;
+    }
+
+    .container {
+        padding: 1px;
+    }
+
+    .container form {
+        grid-template-columns: 1fr;
+    }
+
+    .container form div {
+        margin-bottom: 2px;
+    }
+
+    .container form button {
+        padding: 2px;
+        font-size: 0.75rem;
+    }
+
+    .container form .text-right {
+        text-align: left;
+    }
+
+    .container form .text-right button {
+        margin-top: 2px;
+    }
+
+    .max-w-7xl {
+        padding: 2px;
+    }
+
+    h1 {
+        font-size: 1.5xl;
+    }
+
+    table {
+        font-size: 10px;
+    }
+
+    th, td {
+        padding: 2px;
+    }
+}
+
+@media (min-width: 321px) and (max-width: 480px) {
+    .status-item {
+        padding: 7px;
+        font-size: 0.8125rem;
+    }
+
+    .status-item h3 {
+        font-size: 0.9375rem;
+    }
+
+    .status-item p {
+        font-size: 1.75rem;
+    }
+
+    .table-auto th,
+    .table-auto td {
+        padding: 1.5px;
+        font-size: 0.6875rem;
+    }
+
+    .table-auto th {
+        font-size: 0.8125rem;
+    }
+
+    .table-auto td {
+        font-size: 0.6875rem;
+    }
+
+    .container {
+        padding: 1.5px;
+    }
+
+    .container form {
+        grid-template-columns: 1fr;
+    }
+
+    .container form div {
+        margin-bottom: 3px;
+    }
+
+    .container form button {
+        padding: 3px;
+        font-size: 0.8125rem;
+    }
+
+    .container form .text-right {
+        text-align: left;
+    }
+
+    .container form .text-right button {
+        margin-top: 3px;
+    }
+
+    .max-w-7xl {
+        padding: 3px;
+    }
+
+    h1 {
+        font-size: 1.75xl;
+    }
+
+    table {
+        font-size: 11px;
+    }
+
+    th, td {
+        padding: 3px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+    .status-item {
+        padding: 10px;
+        font-size: 0.875rem;
+    }
+
+    .status-item h3 {
+        font-size: 1rem;
+    }
+
+    .status-item p {
+        font-size: 2rem;
+    }
+
+    .table-auto th,
+    .table-auto td {
+        padding: 2px;
+        font-size: 0.75rem;
+    }
+
+    .table-auto th {
+        font-size: 0.875rem;
+    }
+
+    .table-auto td {
+        font-size: 0.75rem;
+    }
+
+    .container {
+        padding: 2px;
+    }
+
+    .container form {
+        grid-template-columns: 1fr;
+    }
+
+    .container form div {
+        margin-bottom: 4px;
+    }
+
+    .container form button {
+        padding: 4px;
+        font-size: 0.875rem;
+    }
+
+    .container form .text-right {
+        text-align: left;
+    }
+
+    .container form .text-right button {
+        margin-top: 4px;
+    }
+
+    .max-w-7xl {
+        padding: 4px;
+    }
+
+    h1 {
+        font-size: 2xl;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 4px;
+    }
+}
+
+/* Tablet Styles */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .status-item {
+        padding: 8px;
+        font-size: 1rem;
+    }
+
+    .status-item h3 {
+        font-size: 1.25rem;
+    }
+
+    .status-item p {
+        font-size: 2.5rem;
+    }
+
+    .table-auto th,
+    .table-auto td {
+        padding: 4px;
+        font-size: 0.875rem;
+    }
+
+    .table-auto th {
+        font-size: 1rem;
+    }
+
+    .table-auto td {
+        font-size: 0.875rem;
+    }
+
+    .container {
+        padding: 4px;
+    }
+
+    .container form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .container form div {
+        margin-bottom: 8px;
+    }
+
+    .container form button {
+        padding: 8px;
+        font-size: 1rem;
+    }
+
+    .container form .text-right {
+        text-align: right;
+    }
+
+    .container form .text-right button {
+        margin-top: 8px;
+    }
+
+    .max-w-7xl {
+        padding: 8px;
+    }
+
+    h1 {
+        font-size: 3xl;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+}
+
+/* Laptop Styles */
+@media (min-width: 1025px) and (max-width: 1440px) {
+    .status-item {
+        padding: 12px;
+        font-size: 1.125rem;
+    }
+
+    .status-item h3 {
+        font-size: 1.5rem;
+    }
+
+    .status-item p {
+        font-size: 3rem;
+    }
+
+    .table-auto th,
+    .table-auto td {
+        padding: 6px;
+        font-size: 1rem;
+    }
+
+    .table-auto th {
+        font-size: 1.125rem;
+    }
+
+    .table-auto td {
+        font-size: 1rem;
+    }
+
+    .container {
+        padding: 6px;
+    }
+
+    .container form {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .container form div {
+        margin-bottom: 12px;
+    }
+
+    .container form button {
+        padding: 12px;
+        font-size: 1.125rem;
+    }
+
+    .container form .text-right {
+        text-align: right;
+    }
+
+    .container form .text-right button {
+        margin-top: 12px;
+    }
+
+    .max-w-7xl {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 3.5xl;
+    }
+
+    table {
+        font-size: 16px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
+
+/* PC Styles */
+@media (min-width: 1441px) {
+    .status-item {
+        padding: 16px;
+        font-size: 1.25rem;
+    }
+
+    .status-item h3 {
+        font-size: 1.75rem;
+    }
+
+    .status-item p {
+        font-size: 3.5rem;
+    }
+
+    .table-auto th,
+    .table-auto td {
+        padding: 8px;
+        font-size: 1.125rem;
+    }
+
+    .table-auto th {
+        font-size: 1.25rem;
+    }
+
+    .table-auto td {
+        font-size: 1.125rem;
+    }
+
+    .container {
+        padding: 8px;
+    }
+
+    .container form {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .container form div {
+        margin-bottom: 16px;
+    }
+
+    .container form button {
+        padding: 16px;
+        font-size: 1.25rem;
+    }
+
+    .container form .text-right {
+        text-align: right;
+    }
+
+    .container form .text-right button {
+        margin-top: 16px;
+    }
+
+    .max-w-7xl {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 4xl;
+    }
+
+    table {
+        font-size: 18px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+}

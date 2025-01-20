@@ -83,7 +83,7 @@
                         @foreach ($pegawai as $item)
                         <div class="flex items-center">
                             <input type="checkbox" name="list_daftar_nama[]" value="{{ $item->id }}" id="pegawai_{{ $item->id }}" class="checkbox">
-                            <label for="pegawai_{{ $item->id }}" class="ml-2">{{ $item->name }}</label>
+                            <label for="pegawai_{{ $item->id }}" class="ml-2">{{ $item->name }} - {{ $item->bidang->name }}</label>
                         </div>
                         @endforeach
                     </div>
@@ -127,7 +127,10 @@
                         <td class="px-4 py-2">
                             <ul class="list-disc pl-4">
                                 @foreach (json_decode($agenda->list_daftar_nama, true) as $pegawai_id)
-                                <li>{{ App\Models\Pegawai::find($pegawai_id)->name ?? 'Tidak ditemukan' }}</li>
+                                @php
+                                $pegawai = App\Models\Pegawai::find($pegawai_id);
+                                @endphp
+                                <li>{{ $pegawai ? $pegawai->name . '-' . $pegawai->bidang->name : 'Tidak ditemukan' }}</li>
                                 @endforeach
                             </ul>
                         </td>
@@ -137,11 +140,17 @@
                             </button>
                         </td>
                         <td class="px-4 py-2 text-center">
-                            <a href="{{ route('meeting-rooms.edit', $agenda->id) }}" class="btn-edit">Edit</a>
+                            <a href="{{ route('meeting-rooms.edit', $agenda->id) }}" class="text-blue-500 hover:text-blue-700">
+                                <i class='bx bx-edit-alt bx-sm'></i>
+                                Edit
+                            </a>
                             <form action="{{ route('meeting-rooms.destroy', $agenda->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-delete">Hapus</button>
+                                <button type="submit" class="text-red-500 hover:text-red-700">
+                                    <i class='bx bx-trash bx-sm'></i>
+                                    Hapus
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -154,6 +163,15 @@
         </div>
         @endif
     </div>
+</div>
+<!-- Formulir Pencarian Nama Acara -->
+<div class="mb-8">
+    <form action="{{ route('meeting-rooms.index') }}" method="GET">
+        <div class="flex items-center">
+            <input type="text" name="search" placeholder="Cari nama acara..." value="{{ request('search') }}" class="input-field">
+            <button type="submit" class="btn-submit ml-2">Cari</button>
+        </div>
+    </form>
 </div>
 
 <script>
