@@ -5,38 +5,38 @@
 @section('content')
 @include('components.popup')
 <link href="{{ asset('css/media-beranda.css') }}" rel="stylesheet">
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
     <!-- Kategori Umum -->
-    <div class="status-item p-6 bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl">
+    <div class="status-item p-4 sm:p-6 bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl">
         <div class="flex items-center space-x-4">
-            <div class="bg-white p-3 rounded-full">
-                <i class="bx bx-info-circle text-4xl text-blue-500"></i>
+            <div class="bg-white p-2 sm:p-3 rounded-full">
+                <i class="bx bx-info-circle text-3xl sm:text-4xl text-blue-500"></i>
             </div>
-            <h3 class="text-white text-xl font-semibold">Kategori Biasa</h3>
+            <h3 class="text-white text-lg sm:text-xl font-semibold">Kategori Biasa</h3>
         </div>
-        <p class="text-4xl text-white font-bold mt-2">{{ $agendaCount['biasa'] }}</p>
+        <p class="text-3xl sm:text-4xl text-white font-bold mt-2">{{ $agendaCount['biasa'] }}</p>
     </div>
 
     <!-- Kategori Penting -->
-    <div class="status-item p-6 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl">
+    <div class="status-item p-4 sm:p-6 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl">
         <div class="flex items-center space-x-4">
-            <div class="bg-white p-3 rounded-full">
-                <i class="bx bx-task text-4xl text-yellow-500"></i>
+            <div class="bg-white p-2 sm:p-3 rounded-full">
+                <i class="bx bx-task text-3xl sm:text-4xl text-yellow-500"></i>
             </div>
-            <h3 class="text-white text-xl font-semibold">Kategori Penting</h3>
+            <h3 class="text-white text-lg sm:text-xl font-semibold">Kategori Penting</h3>
         </div>
-        <p class="text-4xl text-white font-bold mt-2">{{ $agendaCount['penting'] }}</p>
+        <p class="text-3xl sm:text-4xl text-white font-bold mt-2">{{ $agendaCount['penting'] }}</p>
     </div>
 
     <!-- Kategori Rapat -->
-    <div class="status-item p-6 bg-gradient-to-r from-green-400 to-green-500 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl">
+    <div class="status-item p-4 sm:p-6 bg-gradient-to-r from-green-400 to-green-500 rounded-lg shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl">
         <div class="flex items-center space-x-4">
-            <div class="bg-white p-3 rounded-full">
-                <i class="bx bx-group text-4xl text-green-500"></i>
+            <div class="bg-white p-2 sm:p-3 rounded-full">
+                <i class="bx bx-group text-3xl sm:text-4xl text-green-500"></i>
             </div>
-            <h3 class="text-white text-xl font-semibold">Kategori Rapat</h3>
+            <h3 class="text-white text-lg sm:text-xl font-semibold">Kategori Rapat</h3>
         </div>
-        <p class="text-4xl text-white font-bold mt-2">{{ $agendaCount['rapat'] }}</p>
+        <p class="text-3xl sm:text-4xl text-white font-bold mt-2">{{ $agendaCount['rapat'] }}</p>
     </div>
 </div>
 
@@ -91,31 +91,31 @@
     <table class="table-auto w-full border-collapse bg-white rounded-lg shadow-lg">
         <thead>
             <tr class="bg-white">
-                <th class="px-4 py-2 border">No</th>
-                <th class="px-4 py-2 border">Nama Acara</th>
-                <th class="px-4 py-2 border">Kategori</th>
-                <th class="px-4 py-2 border">Tanggal</th>
-                <th class="px-4 py-2 border">Waktu</th>
-                <th class="px-4 py-2 border">Lokasi</th>
-                <th class="px-4 py-2 border">Undangan</th>
+                <th class="px-2 sm:px-4 py-2 border">No</th>
+                <th class="px-2 sm:px-4 py-2 border">Nama Acara</th>
+                <th class="px-2 sm:px-4 py-2 border">Kategori</th>
+                <th class="px-2 sm:px-4 py-2 border">Tanggal</th>
+                <th class="px-2 sm:px-4 py-2 border">Waktu</th>
+                <th class="px-2 sm:px-4 py-2 border">Lokasi</th>
+                <th class="px-2 sm:px-4 py-2 border">Undangan</th>
             </tr>
         </thead>
         <tbody id="agenda-table-body">
             @foreach ($agendas as $agenda)
             <tr class="{{ $loop->odd ? 'bg-gray-100' : 'bg-white' }} hover:bg-gray-200 transition duration-200">
-                <td class="px-4 py-2 border text-center">{{ $loop->iteration }}</td>
-                <td class="px-4 py-2 border">{{ $agenda->nama_acara }}</td>
-                <td class="px-4 py-2 border">{{ $agenda->kategori }}</td>
-                <td class="px-4 py-2 border">{{ $agenda->tanggal_mulai }} sampai {{ $agenda->tanggal_selesai }}</td>
-                <td class="px-4 py-2 border">{{ $agenda->waktu_mulai }} - {{ $agenda->waktu_selesai }}</td>
-                <td class="px-4 py-2 border">{{ $agenda->tempat }}</td>
-                <td class="px-4 py-2 border">
+                <td class="px-2 sm:px-4 py-2 border text-center">{{ $loop->iteration }}</td>
+                <td class="px-2 sm:px-4 py-2 border">{{ $agenda->nama_acara }}</td>
+                <td class="px-2 sm:px-4 py-2 border">{{ $agenda->kategori }}</td>
+                <td class="px-2 sm:px-4 py-2 border">{{ $agenda->tanggal_mulai }} sampai {{ $agenda->tanggal_selesai }}</td>
+                <td class="px-2 sm:px-4 py-2 border">{{ $agenda->waktu_mulai }} - {{ $agenda->waktu_selesai }}</td>
+                <td class="px-2 sm:px-4 py-2 border">{{ $agenda->tempat }}</td>
+                <td class="px-2 sm:px-4 py-2 border">
                     @php
                     $listNama = json_decode($agenda->list_daftar_nama, true);
                     @endphp
 
                     @if (!empty($listNama))
-                    <ul class= "list-disc pl-4">
+                    <ul class="list-disc pl-4">
                         @foreach (json_decode($agenda->list_daftar_nama, true) as $pegawai_id)
                         @php
                         $pegawai = App\Models\Pegawai::find($pegawai_id);
@@ -131,7 +131,6 @@
             @endforeach
         </tbody>
     </table>
-
 
     <div class="mt-4">
         {{ $agendas->links() }}

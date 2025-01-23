@@ -140,71 +140,99 @@
             /*jarak antar mian content dan header */
         }
 
-        /* Bottom Navigation Styles */
+        /* Kontainer Navigasi */
         #bottomNav {
-            background-color: #ffffff;
-            border-top: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            /* Jarak antar elemen */
+            align-items: center;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 12px 16px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            border-top: 1px solid #e5e7eb;
         }
 
+        /* Item Navigasi */
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            color: #4a5568;
             text-decoration: none;
-            transition: transform 0.3s, color 0.3s;
-            position: relative;
+            color: #6b7280;
+            /* Gray-500 */
+            font-size: 11px;
+            /* Ukuran lebih kecil untuk mobile */
+            font-weight: 500;
+            transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            flex: 1;
+            /* Membagi ruang secara merata */
+            max-width: 60px;
+            /* Batasan lebar tiap item */
         }
 
-        .nav-item:hover {
-            color: #1e40af;
-            /* Tailwind blue-900 */
-            transform: translateY(-5px);
-        }
-
-        .nav-item:hover .nav-icon {
-            transform: scale(1.2);
-            color: #1e40af;
-            /* Tailwind blue-900 */
-        }
-
-        .nav-item:hover .nav-text {
-            font-weight: 600;
-            color: #1e40af;
-        }
-
+        /* Ikon Navigasi */
         .nav-icon {
             font-size: 24px;
-            color: #a0aec0;
-            /* Tailwind gray-400 */
-            transition: transform 0.3s, color 0.3s;
+            margin-bottom: 4px;
+            color: inherit;
+            transition: color 0.3s ease, transform 0.2s ease;
         }
 
+        /* Efek Hover */
+        .nav-item:hover {
+            color: #2563eb;
+            /* Blue-600 */
+        }
+
+        /* Teks Navigasi */
         .nav-text {
-            font-size: 12px;
-            margin-top: 4px;
-            color: #718096;
-            /* Tailwind gray-600 */
-            transition: font-weight 0.3s, color 0.3s;
+            font-size: 10px;
+            /* Teks kecil untuk menghemat ruang */
+            font-weight: 500;
+            text-align: center;
         }
 
-        /* Glow Effect on Active or Hovered Items */
-        .nav-item:active .nav-icon,
-        .nav-item:focus .nav-icon {
-            box-shadow: 0px 0px 8px rgba(30, 64, 175, 0.6);
-            /* Blue glow */
-            transform: scale(1.1);
+        /* Penanda Aktif */
+        .nav-item.text-blue-500 .nav-icon {
+            color: #2563eb;
+            /* Blue-600 */
         }
 
-        /* Responsive Adjustments */
-        @media (max-width: 640px) {
+        /* Responsif untuk Tablet */
+        @media (min-width: 640px) {
+            #bottomNav {
+                padding: 16px 32px;
+                /* Tambah padding */
+            }
+
+            .nav-item {
+                font-size: 13px;
+                /* Ukuran teks lebih besar */
+                max-width: 80px;
+                /* Lebar lebih besar */
+            }
+
             .nav-icon {
-                font-size: 20px;
+                font-size: 28px;
+                /* Ikon lebih besar */
             }
 
             .nav-text {
-                font-size: 10px;
+                font-size: 12px;
+                /* Teks lebih besar */
+            }
+        }
+
+        /* Responsif untuk Layar Besar */
+        @media (min-width: 1024px) {
+            #bottomNav {
+                display: none;
+                /* Sembunyikan di layar besar */
             }
         }
     </style>

@@ -90,30 +90,36 @@
     <h2 class="text-gray-400 text-base mb-4 ml-4 absolute bottom-0 left-0 p-4">&copy; Hak Cipta 2024</h2>
 </div>
 <!-- Bottom Navigation Bar for Mobile and Tablet -->
-<div id="bottomNav" class="fixed bottom-0 left-0 w-full bg-white shadow-lg p-4 flex justify-around lg:hidden transition-transform duration-300 z-50">
-    <a href="/" class="nav-item">
-        <box-icon name="home" class="nav-icon"></box-icon>
-        <span class="nav-text">Beranda</span>
+<div id="bottomNav" class="fixed bottom-0 left-0 w-full bg-white shadow-lg p-4 flex justify-between items-center lg:hidden transition-transform duration-300 z-50 border-t border-gray-200">
+    <a href="/" class="nav-item group {{ request()->is('/') ? 'text-blue-500' : 'text-gray-700' }}">
+        <box-icon name="home" class="nav-icon group-hover:text-blue-500"></box-icon>
+        <span class="nav-text group-hover:text-blue-500">Beranda</span>
     </a>
-    <a href="{{ route('users.index') }}" class="nav-item">
-        <box-icon name="user" class="nav-icon"></box-icon>
-        <span class="nav-text">Data User</span>
+    <a href="{{ route('users.index') }}" class="nav-item group {{ request()->is('users') ? 'text-blue-500' : 'text-gray-700' }}">
+        <box-icon name="user" class="nav-icon group-hover:text-blue-500"></box-icon>
+        <span class="nav-text group-hover:text-blue-500">Data User</span>
     </a>
     @if(auth()->user()->role_id == 1 || auth()->user()->role_id == 2)
-    <a href="{{ route('pegawai.create') }}" class="nav-item">
-        <box-icon name="folder-plus" class="nav-icon"></box-icon>
-        <span class="nav-text">Data Pegawai</span>
+    <a href="{{ route('pegawai.create') }}" class="nav-item group {{ request()->is('pegawai.create') ? 'text-blue-500' : 'text-gray-700' }}">
+        <box-icon name="folder-plus" class="nav-icon group-hover:text-blue-500"></box-icon>
+        <span class="nav-text group-hover:text-blue-500">Data Pegawai</span>
     </a>
     @endif
-    <a href="{{ route('agendas.index') }}" class="nav-item">
-        <box-icon name="calendar" class="nav-icon"></box-icon>
-        <span class="nav-text">Agenda Kegiatan</span>
+    <a href="{{ route('agendas.index') }}" class="nav-item group {{ request()->is('agendas') ? 'text-blue-500' : 'text-gray-700' }}">
+        <box-icon name="calendar" class="nav-icon group-hover:text-blue-500"></box-icon>
+        <span class="nav-text group-hover:text-blue-500">Agenda Kegiatan</span>
     </a>
-    <a href="{{ route('meeting-rooms.index') }}" class="nav-item">
-        <box-icon name="building" class="nav-icon"></box-icon>
-        <span class="nav-text">Ruang Rapat</span>
+    <a href="{{ route('meeting-rooms.index') }}" class="nav-item group {{ request()->is('meeting-rooms') ? 'text-blue-500' : 'text-gray-700' }}">
+        <box-icon name="building" class="nav-icon group-hover:text-blue-500"></box-icon>
+        <span class="nav-text group-hover:text-blue-500">Ruang Rapat</span>
+    </a>
+    <a href="{{ route('profile.edit') }}" class="nav-item group {{ request()->is('profile') ? 'text-blue-500' : 'text-gray-700' }}">
+        <box-icon name="user-circle" class="nav-icon group-hover:text-blue-500"></box-icon>
+        <span class="nav-text group-hover:text-blue-500">Profil User</span>
     </a>
 </div>
+
+
 
 
 <main id="mainContent" class="transition-all duration-300 p-8">

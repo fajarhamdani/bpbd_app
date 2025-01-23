@@ -164,15 +164,6 @@
         @endif
     </div>
 </div>
-<!-- Formulir Pencarian Nama Acara -->
-<div class="mb-8">
-    <form action="{{ route('meeting-rooms.index') }}" method="GET">
-        <div class="flex items-center">
-            <input type="text" name="search" placeholder="Cari nama acara..." value="{{ request('search') }}" class="input-field">
-            <button type="submit" class="btn-submit ml-2">Cari</button>
-        </div>
-    </form>
-</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
