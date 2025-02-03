@@ -79,14 +79,27 @@
 
                 <div class="md:col-span-2">
                     <label for="list_daftar_nama" class="block text-sm font-medium text-gray-700">Daftar Nama Peserta</label>
-                    <input type="text" id="search_list_daftar_nama" class="input-field mb-2" placeholder="Cari nama peserta..." oninput="filterOptions()">
-                    <div id="list_daftar_nama" class="space-y-2 max-h-40 overflow-y-auto">
-                        @foreach ($pegawai as $item)
-                        <div class="flex items-center">
-                            <input type="checkbox" name="list_daftar_nama[]" value="{{ $item->id }}" id="pegawai_{{ $item->id }}" class="checkbox">
-                            <label for="pegawai_{{ $item->id }}" class="ml-2">{{ $item->name }} - {{ $item->bidang->name }}</label>
+                    <button type="button" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-lg mt-2 transition duration-300" onclick="openPopup()">Pilih Peserta</button>
+                    <div id="selected_participants" class="mt-2 space-y-2"></div>
+                </div>
+
+                <!-- Popup Form -->
+                <div id="popup_form" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg border-t-4 border-yellow-500">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Pilih Peserta</h2>
+                        <input type="text" id="search_list_daftar_nama" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Cari nama peserta..." oninput="filterOptions()">
+                        <div id="list_daftar_nama" class="space-y-2 max-h-40 overflow-y-auto mb-4">
+                            @foreach ($pegawai as $item)
+                            <div class="flex items-center p-2 bg-gray-100 rounded-lg hover:bg-yellow-100 transition">
+                                <input type="checkbox" name="list_daftar_nama[]" value="{{ $item->id }}" id="pegawai_{{ $item->id }}" class="checkbox accent-yellow-500" onchange="updateSelectedParticipants()">
+                                <label for="pegawai_{{ $item->id }}" class="ml-2 text-gray-800 font-medium">{{ $item->name }} - {{ $item->bidang->name }}</label>
+                            </div>
+                            @endforeach
                         </div>
-                        @endforeach
+                        <div class="flex justify-end">
+                            <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white font-semibold px-4 py-2 rounded-lg transition duration-300 mr-2" onclick="closePopup()">Batal</button>
+                            <button type="button" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-lg transition duration-300" onclick="closePopup()">Simpan</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -171,6 +184,41 @@
     </div>
 
     <script>
+        function openPopup() {
+            document.getElementById('popup_form').classList.remove('hidden');
+        }
+
+        function closePopup() {
+            document.getElementById('popup_form').classList.add('hidden');
+        }
+
+        function filterOptions() {
+            let searchInput = document.getElementById('search_list_daftar_nama').value.toLowerCase();
+            let options = document.querySelectorAll('#list_daftar_nama .flex');
+
+            options.forEach(option => {
+                let label = option.querySelector('label').textContent.toLowerCase();
+                if (label.indexOf(searchInput) > -1) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+
+        function updateSelectedParticipants() {
+            let selectedParticipants = document.getElementById('selected_participants');
+            selectedParticipants.innerHTML = '';
+
+            let checkboxes = document.querySelectorAll('#list_daftar_nama .checkbox:checked');
+            checkboxes.forEach(checkbox => {
+                let label = checkbox.nextElementSibling.textContent;
+                let div = document.createElement('div');
+                div.textContent = label;
+                selectedParticipants.appendChild(div);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const buttons = document.querySelectorAll('.toggle-laporan');
 
@@ -309,4 +357,4 @@
         });
     </script>
 
-@endsection
+    @endsection

@@ -79,14 +79,28 @@
 
                 <div class="md:col-span-2">
                     <label for="list_daftar_nama" class="block text-sm font-medium text-gray-700">Daftar Nama Peserta</label>
-                    <input type="text" id="search_list_daftar_nama" class="input-field mb-2" placeholder="Cari nama peserta..." oninput="filterOptions()">
-                    <div id="list_daftar_nama" class="space-y-2 max-h-40 overflow-y-auto">
-                        @foreach ($pegawai as $item)
-                        <div class="flex items-center">
-                            <input type="checkbox" name="list_daftar_nama[]" value="{{ $item->id }}" id="pegawai_{{ $item->id }}" class="checkbox">
-                            <label for="pegawai_{{ $item->id }}" class="ml-2">{{ $item->name }} - {{ $item->bidang->name }}</label>
+                    <button type="button" class="btn-popup bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600" onclick="openPopup()">Pilih Peserta</button>
+                </div>
+
+                <!-- Popup Form -->
+                <div id="popupForm" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+                    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h2 class="text-xl font-semibold text-gray-800">Pilih Peserta</h2>
+                            <button type="button" class="text-gray-600 hover:text-gray-900 text-2xl" onclick="closePopup()">&times;</button>
                         </div>
-                        @endforeach
+                        <input type="text" id="search_list_daftar_nama" class="w-full border border-gray-300 rounded py-2 px-3 mb-2" placeholder="Cari nama peserta..." oninput="filterOptions()">
+                        <div id="list_daftar_nama" class="space-y-2 max-h-40 overflow-y-auto border border-gray-300 rounded p-2">
+                            @foreach ($pegawai as $item)
+                            <div class="flex items-center py-1 px-2 hover:bg-gray-100 rounded">
+                                <input type="checkbox" name="list_daftar_nama[]" value="{{ $item->id }}" id="pegawai_{{ $item->id }}" class="checkbox">
+                                <label for="pegawai_{{ $item->id }}" class="ml-2 text-gray-700">{{ $item->name }} - {{ $item->bidang->name }}</label>
+                            </div>
+                            @endforeach
+                        </div>
+                        <div class="flex justify-end mt-4">
+                            <button type="button" class="bg-gray-400 text-white py-2 px-4 rounded hover:bg-gray-500" onclick="closePopup()">Tutup</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -98,6 +112,28 @@
 </div>
 
 <script>
+    function openPopup() {
+        document.getElementById('popupForm').classList.remove('hidden');
+    }
+
+    function closePopup() {
+        document.getElementById('popupForm').classList.add('hidden');
+    }
+
+    function filterOptions() {
+        let searchInput = document.getElementById('search_list_daftar_nama').value.toLowerCase();
+        let options = document.querySelectorAll('#list_daftar_nama .flex');
+
+        options.forEach(option => {
+            let label = option.querySelector('label').textContent.toLowerCase();
+            if (label.indexOf(searchInput) > -1) {
+                option.style.display = '';
+            } else {
+                option.style.display = 'none';
+            }
+        });
+    }
+
     function filterOptions() {
         let searchInput = document.getElementById('search_list_daftar_nama').value.toLowerCase();
         let options = document.querySelectorAll('#list_daftar_nama .flex');
