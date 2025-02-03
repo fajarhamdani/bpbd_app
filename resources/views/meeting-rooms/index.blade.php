@@ -237,34 +237,50 @@
             const buttons = document.querySelectorAll('.toggle-laporan');
 
             buttons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const agendaId = this.dataset.id;
+            button.addEventListener('click', function() {
+                const agendaId = this.dataset.id;
 
-                    fetch(`/meeting-rooms/${agendaId}/toggle-laporan`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Content-Type': 'application/json',
-                            },
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                const row = this.closest('tr');
-                                row.classList.toggle('bg-red-100', !data.report);
-                                row.classList.toggle('bg-green-100', data.report);
-                                this.classList.toggle('bg-red-500', !data.report);
-                                this.classList.toggle('bg-green-500', data.report);
-                                this.textContent = data.report ? 'Selesai' : 'Belum';
-                            } else {
-                                alert('Gagal memperbarui status laporan.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Terjadi kesalahan.');
-                        });
+                fetch(`/meeting-rooms/${agendaId}/toggle-laporan`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+                })
+                .then(response => response.json())
+                .then(data => {
+                if (data.status === 'success') {
+                    const row = this.closest('tr');
+                    row.classList.toggle('bg-red-100', !data.report);
+                    row.classList.toggle('bg-green-100', data.report);
+                    this.classList.toggle('bg-red-500', !data.report);
+                    this.classList.toggle('bg-green-500', data.report);
+                    this.textContent = data.report ? 'Selesai' : 'Belum';
+                } else {
+                    alert('Gagal memperbarui status laporan.');
+                }
+                })
+                .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan.');
                 });
+            });
+            });
+
+            // Update row colors based on current time
+            const rows = document.querySelectorAll('tbody tr');
+            const currentDateTime = new Date();
+
+            rows.forEach(row => {
+            const endDateTime = new Date(row.querySelector('td:nth-child(4)').textContent.split(' - ')[1] + ' ' + row.querySelector('td:nth-child(5)').textContent.split(' - ')[1]);
+            const isCompleted = currentDateTime >= endDateTime;
+
+            row.classList.toggle('bg-green-100', isCompleted);
+            row.classList.toggle('bg-red-100', !isCompleted);
+            const button = row.querySelector('.toggle-laporan');
+            button.classList.toggle('bg-green-500', isCompleted);
+            button.classList.toggle('bg-red-500', !isCompleted);
+            button.textContent = isCompleted ? 'Selesai' : 'Belum';
             });
         });
 
