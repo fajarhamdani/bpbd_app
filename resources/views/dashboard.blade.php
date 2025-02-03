@@ -245,23 +245,71 @@
                 // Handle "Undangan" content and ensure proper formatting
                 const undanganCell = row.querySelector('td:nth-child(7)');
                 const undangan = Array.from(undanganCell.querySelectorAll('li'))
-                    .map(li => li.textContent.trim())
+                    .map((li, index) => `${index + 1}. ${li.textContent.trim()}`)
                     .filter(text => text !== '') // Remove empty texts
-                    .join(', '); // Combine with comma and space
+                    .join('\n'); // Combine with newline
 
-                textToCopy += `No: ${no}\nNama Acara: ${namaAcara}\nKategori: ${kategori}\nTanggal: ${tanggal}\nWaktu: ${waktu}\nLokasi: ${lokasi}\nUndangan: ${undangan}\n\n`;
+                textToCopy += `No: ${no}\nNama Acara: ${namaAcara}\nKategori: ${kategori}\nTanggal: ${tanggal}\nWaktu: ${waktu}\nLokasi: ${lokasi}\nUndangan:\n${undangan}\n\n`;
             });
 
             // Copy text to clipboard
             navigator.clipboard.writeText(textToCopy)
                 .then(() => {
-                    alert('Data berhasil disalin ke clipboard!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Data berhasil disalin ke clipboard!',
+                    });
                 })
                 .catch(err => {
-                    console.error('Gagal menyalin: ', err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Gagal menyalin: ' + err,
+                    });
                 });
         });
     });
-</script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const rows = document.querySelectorAll('#agenda-table-body tr');
 
+        rows.forEach(row => {
+            const undanganCell = row.querySelector('td:nth-child(7)');
+            const undanganList = undanganCell.querySelectorAll('li');
+
+            if (undanganList.length > 2) {
+                const showMoreBtn = document.createElement('button');
+                showMoreBtn.textContent = 'Show More';
+                showMoreBtn.classList.add('text-blue-500', 'underline', 'cursor-pointer', 'ml-2');
+
+                const showLessBtn = document.createElement('button');
+                showLessBtn.textContent = 'Show Less';
+                showLessBtn.classList.add('text-blue-500', 'underline', 'cursor-pointer', 'ml-2', 'hidden');
+
+                undanganCell.appendChild(showMoreBtn);
+                undanganCell.appendChild(showLessBtn);
+
+                for (let i = 2; i < undanganList.length; i++) {
+                    undanganList[i].classList.add('hidden');
+                }
+
+                showMoreBtn.addEventListener('click', () => {
+                    for (let i = 2; i < undanganList.length; i++) {
+                        undanganList[i].classList.remove('hidden');
+                    }
+                    showMoreBtn.classList.add('hidden');
+                    showLessBtn.classList.remove('hidden');
+                });
+
+                showLessBtn.addEventListener('click', () => {
+                    for (let i = 2; i < undanganList.length; i++) {
+                        undanganList[i].classList.add('hidden');
+                    }
+                    showMoreBtn.classList.remove('hidden');
+                    showLessBtn.classList.add('hidden');
+                });
+            }
+        });
+    });
+</script>
 @endsection

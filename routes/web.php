@@ -41,9 +41,7 @@ Route::middleware('auth')->group(function () { // Untuk proses verifikasi
     Route::delete('/agendas/{id}', [AgendaController::class, 'destroy'])->name('agendas.destroy');
 
     // Mengubah status laporan
-    Route::post('/agenda/{id}/toggle-laporan', [AgendaController::class, 'toggleLaporan'])
-        ->middleware('auth')
-        ->name('agenda.toggleLaporan');
+    Route::post('agendas/{id}/toggle-laporan', [AgendaController::class, 'toggleLaporan'])->name('agendas.toggleLaporan');
 
     Route::middleware(['auth'])->group(function () {
         Route::get('meeting-rooms', [MeetingRoomController::class, 'index'])->name('meeting-rooms.index');

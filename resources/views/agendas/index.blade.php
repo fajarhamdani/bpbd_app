@@ -118,7 +118,12 @@
                 </thead>
                 <tbody>
                     @foreach ($agendas as $agenda)
-                    <tr data-kategori="{{ $agenda->kategori }}" class="{{ $loop->odd ? 'bg-gray-100' : 'bg-white' }} hover:bg-gray-200 transition duration-200">
+                    @php
+                    $currentDateTime = \Carbon\Carbon::now();
+                    $endDateTime = \Carbon\Carbon::parse($agenda->tanggal_selesai . ' ' . $agenda->waktu_selesai);
+                    $isCompleted = $currentDateTime->greaterThanOrEqualTo($endDateTime);
+                    @endphp
+                    <tr data-kategori="{{ $agenda->kategori }}" class="{{ $isCompleted ? 'bg-green-100' : 'bg-red-100' }} {{ $loop->odd ? 'bg-gray-100' : 'bg-white' }} hover:bg-gray-200 transition duration-200">
                         <td class="px-4 py-2">{{ $loop->iteration }}</td>
                         <td class="px-4 py-2">{{ $agenda->nama_acara }}</td>
                         <td class="px-4 py-2">{{ $agenda->kategori }}</td>
@@ -136,8 +141,8 @@
                             </ul>
                         </td>
                         <td class="px-4 py-2 text-center">
-                            <button class="px-4 py-2 bg-green-500 text-white rounded-lg">
-                                {{ $agenda->report ? 'Selesai' : 'Belum' }}
+                            <button class="px-4 py-2 {{ $isCompleted ? 'bg-green-500' : 'bg-red-500' }} text-white rounded-lg toggle-laporan" data-id="{{ $agenda->id }}">
+                                {{ $isCompleted ? 'Selesai' : 'Belum' }}
                             </button>
                         </td>
                         <td class="px-4 py-2 text-center">
@@ -164,139 +169,144 @@
         </div>
         @endif
     </div>
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const buttons = document.querySelectorAll('.toggle-laporan');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.toggle-laporan');
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                const agendaId = this.dataset.id;
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const agendaId = this.dataset.id;
 
-                fetch(`/agendas/${agendaId}/toggle-laporan`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json',
-                        },
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            this.classList.toggle('bg-red-500', !data.report);
-                            this.classList.toggle('bg-green-500', data.report);
-                            this.textContent = data.report ? 'Selesai dikerjakan' : 'Belum dikerjakan';
-                        } else {
-                            alert('Gagal memperbarui status laporan.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan.');
-                    });
-            });
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const selectAll = document.getElementById('select-all');
-        const checkboxes = document.querySelectorAll('.select-row');
-        const deleteButton = document.getElementById('deleteButton');
-        const editButton = document.getElementById('editButton');
-
-        // Handle select all
-        selectAll.addEventListener('change', function() {
-            checkboxes.forEach(checkbox => checkbox.checked = selectAll.checked);
-            toggleButtons();
-        });
-
-        // Handle individual checkbox click
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', toggleButtons);
-        });
-
-        function toggleButtons() {
-            const selectedCount = document.querySelectorAll('.select-row :checked').length;
-            deleteButton.disabled = selectedCount === 0;
-            editButton.disabled = selectedCount !== 1;
-        }
-
-        // Handle edit button click
-        editButton.addEventListener('click', function() {
-            const selectedId = document.querySelector('.select-row:checked').value;
-            if (selectedId) {
-                window.location.href = `/agendas/${selectedId}/edit`;
-            }
-        });
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        // Fungsi untuk menyaring tabel berdasarkan kategori
-        function filterTableByCategory() {
-            // Ambil semua baris tabel
-            const rows = document.querySelectorAll("tbody tr");
-
-            // Iterasi setiap baris
-            rows.forEach((row) => {
-                // Ambil data kategori dari atribut data-kategori
-                const category = row.getAttribute("data-kategori");
-
-                // Periksa apakah kategori adalah "Rapat"
-                if (category === "Rapat") {
-                    // Sembunyikan baris dengan kategori "Rapat"
-                    row.style.display = "none";
-                } else {
-                    // Tampilkan baris dengan kategori "Penting" atau "Biasa"
-                    row.style.display = "table-row";
-                }
-            });
-        }
-
-        // Panggil fungsi filterTableByCategory saat halaman dimuat
-        filterTableByCategory();
-    });
-
-
-    function filterOptions() {
-        let searchInput = document.getElementById('search_list_daftar_nama').value.toLowerCase();
-        let options = document.querySelectorAll('#list_daftar_nama .flex');
-
-        options.forEach(option => {
-            let label = option.querySelector('label').textContent.toLowerCase();
-            if (label.indexOf(searchInput) > -1) {
-                option.style.display = '';
-            } else {
-                option.style.display = 'none';
-            }
-        });
-    }
-    // SweetAlert for delete confirmation
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteForms = document.querySelectorAll('form[action*="agendas"][method="POST"]');
-
-        deleteForms.forEach(form => {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const form = this;
-
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: 'Anda tidak akan dapat mengembalikan ini!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
+                    fetch(`/agendas/${agendaId}/toggle-laporan`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                const row = this.closest('tr');
+                                row.classList.toggle('bg-red-100', !data.report);
+                                row.classList.toggle('bg-green-100', data.report);
+                                this.classList.toggle('bg-red-500', !data.report);
+                                this.classList.toggle('bg-green-500', data.report);
+                                this.textContent = data.report ? 'Selesai' : 'Belum';
+                                this.classList.add('animate-pulse');
+                                setTimeout(() => {
+                                    this.classList.remove('animate-pulse');
+                                }, 500);
+                            } else {
+                                alert('Gagal memperbarui status laporan.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Terjadi kesalahan.');
+                        });
                 });
             });
         });
-    });
-</script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAll = document.getElementById('select-all');
+            const checkboxes = document.querySelectorAll('.select-row');
+            const deleteButton = document.getElementById('deleteButton');
+            const editButton = document.getElementById('editButton');
+
+            // Handle select all
+            selectAll.addEventListener('change', function() {
+                checkboxes.forEach(checkbox => checkbox.checked = selectAll.checked);
+                toggleButtons();
+            });
+
+            // Handle individual checkbox click
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', toggleButtons);
+            });
+
+            function toggleButtons() {
+                const selectedCount = document.querySelectorAll('.select-row :checked').length;
+                deleteButton.disabled = selectedCount === 0;
+                editButton.disabled = selectedCount !== 1;
+            }
+
+            // Handle edit button click
+            editButton.addEventListener('click', function() {
+                const selectedId = document.querySelector('.select-row:checked').value;
+                if (selectedId) {
+                    window.location.href = `/agendas/${selectedId}/edit`;
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Fungsi untuk menyaring tabel berdasarkan kategori
+            function filterTableByCategory() {
+                // Ambil semua baris tabel
+                const rows = document.querySelectorAll("tbody tr");
+
+                // Iterasi setiap baris
+                rows.forEach((row) => {
+                    // Ambil data kategori dari atribut data-kategori
+                    const category = row.getAttribute("data-kategori");
+
+                    // Periksa apakah kategori adalah "Rapat"
+                    if (category === "Rapat") {
+                        // Sembunyikan baris dengan kategori "Rapat"
+                        row.style.display = "none";
+                    } else {
+                        // Tampilkan baris dengan kategori "Penting" atau "Biasa"
+                        row.style.display = "table-row";
+                    }
+                });
+            }
+
+            // Panggil fungsi filterTableByCategory saat halaman dimuat
+            filterTableByCategory();
+        });
+
+
+        function filterOptions() {
+            let searchInput = document.getElementById('search_list_daftar_nama').value.toLowerCase();
+            let options = document.querySelectorAll('#list_daftar_nama .flex');
+
+            options.forEach(option => {
+                let label = option.querySelector('label').textContent.toLowerCase();
+                if (label.indexOf(searchInput) > -1) {
+                    option.style.display = '';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+        // SweetAlert for delete confirmation
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteForms = document.querySelectorAll('form[action*="agendas"][method="POST"]');
+
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const form = this;
+
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: 'Anda tidak akan dapat mengembalikan ini!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 
 @endsection

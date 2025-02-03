@@ -117,7 +117,12 @@
                 </thead>
                 <tbody>
                     @foreach ($agendas as $agenda)
-                    <tr data-kategori="{{ $agenda->kategori }}" class="{{ $loop->odd ? 'bg-gray-100' : 'bg-white' }} hover:bg-gray-200 transition duration-200">
+                    @php
+                    $currentDateTime = \Carbon\Carbon::now();
+                    $endDateTime = \Carbon\Carbon::parse($agenda->tanggal_selesai . ' ' . $agenda->waktu_selesai);
+                    $isCompleted = $currentDateTime->greaterThanOrEqualTo($endDateTime);
+                    @endphp
+                    <tr data-kategori="{{ $agenda->kategori }}" class="{{ $loop->odd ? 'bg-gray-100' : 'bg-white' }} hover:bg-gray-200 transition duration-200 {{ $isCompleted ? 'bg-green-100' : 'bg-red-100' }}">
                         <td class="px-4 py-2">{{ $loop->iteration }}</td>
                         <td class="px-4 py-2">{{ $agenda->nama_acara }}</td>
                         <td class="px-4 py-2">{{ $agenda->kategori }}</td>
@@ -135,8 +140,8 @@
                             </ul>
                         </td>
                         <td class="px-4 py-2 text-center">
-                            <button class="px-4 py-2 bg-green-500 text-white rounded-lg">
-                                {{ $agenda->report ? 'Selesai' : 'Belum' }}
+                            <button class="toggle-laporan px-4 py-2 {{ $isCompleted ? 'bg-green-500' : 'bg-red-500' }} text-white rounded-lg" data-id="{{ $agenda->id }}">
+                                {{ $isCompleted ? 'Selesai' : 'Belum' }}
                             </button>
                         </td>
                         <td class="px-4 py-2 text-center">
@@ -163,7 +168,6 @@
         </div>
         @endif
     </div>
-</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -183,9 +187,12 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'success') {
+                            const row = this.closest('tr');
+                            row.classList.toggle('bg-red-100', !data.report);
+                            row.classList.toggle('bg-green-100', data.report);
                             this.classList.toggle('bg-red-500', !data.report);
                             this.classList.toggle('bg-green-500', data.report);
-                            this.textContent = data.report ? 'Selesai dikerjakan' : 'Belum dikerjakan';
+                            this.textContent = data.report ? 'Selesai' : 'Belum';
                         } else {
                             alert('Gagal memperbarui status laporan.');
                         }
