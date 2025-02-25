@@ -32,6 +32,14 @@
     </div>
     @endif
 
+    <!-- Pesan Verifikasi untuk role_id 3 -->
+    @if (auth()->user()->role_id == 3)
+    <div class="flex items-center bg-yellow-100 border border-yellow-300 text-yellow-800 text-sm rounded-lg px-4 py-3 mb-6 shadow-md">
+        <i class='bx bx-info-circle bx-sm mr-3'></i>
+        Anda perlu melakukan verifikasi terlebih dahulu.
+    </div>
+    @endif
+
     <!-- Formulir Buat Agenda -->
     <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Buat Agenda Baru</h2>
@@ -129,7 +137,7 @@
                         <th class="px-4 py-2">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody @if (auth()->user()->role_id == 3) style="display: none;" @endif>
                     @foreach ($agendas as $agenda)
                     @php
                     $currentDateTime = \Carbon\Carbon::now();
@@ -174,7 +182,6 @@
                         </td>
                     </tr>
                     @endforeach
-                </tbody>
             </table>
             <div class="px-4 py-3">
                 {{ $agendas->links() }}
